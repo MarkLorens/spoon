@@ -421,7 +421,9 @@ class Component {
     for (let i = 0; i < this.secs.length; i++) {
       const r = this.secs[i].getBoundingClientRect();
       if (r.top <= 0.5) {
-        const span = r.height - vh;
+        // Only the last spacer loses a viewport (page can't scroll past its bottom);
+        // the rest hand off seamlessly, so there's no frozen screen between sections.
+        const span = i === this.secs.length - 1 ? r.height - vh : r.height;
         t = i + (span > 0 ? cl(-r.top / span) : 1);
       }
     }
