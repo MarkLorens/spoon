@@ -1,0 +1,1044 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="src/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
+    />
+    <script type="module" src="/src/main.js"></script>
+    <title>SPOON — Eating, perfected.</title>
+  </head>
+  <body>
+    <div
+      style="
+        position: relative;
+        font-family: &quot;Geist&quot;, system-ui, sans-serif;
+        color: #1d1d1f;
+      "
+    >
+      <div
+        id="sp-bg"
+        style="position: fixed; inset: 0; z-index: 0; background: #ffffff"
+      ></div>
+      <div
+        id="sp-grid"
+        style="
+          position: fixed;
+          inset: 0;
+          z-index: 0;
+          opacity: 0;
+          background-image:
+            linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+            linear-gradient(
+              90deg,
+              rgba(255, 255, 255, 0.06) 1px,
+              transparent 1px
+            ),
+            linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+            linear-gradient(
+              90deg,
+              rgba(255, 255, 255, 0.025) 1px,
+              transparent 1px
+            );
+          background-size:
+            120px 120px,
+            120px 120px,
+            24px 24px,
+            24px 24px;
+          background-position: center center;
+        "
+      ></div>
+      <canvas
+        id="sp-canvas"
+        style="
+          position: fixed;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 2;
+          display: block;
+          pointer-events: none;
+        "
+      ></canvas>
+
+      <svg
+        id="sp-svg"
+        style="
+          position: fixed;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 3;
+          pointer-events: none;
+          overflow: visible;
+        "
+      >
+        <g
+          id="g-arc"
+          data-sec="1"
+          data-show="0.08,0.18,0.94,1.0"
+          data-noshift=""
+          fill="none"
+          stroke="currentColor"
+          style="opacity: 0; color: #1d1d1f"
+        >
+          <line
+            id="m-ref"
+            style="stroke-width: 1; stroke-dasharray: 3 5"
+          ></line>
+          <line id="m-arm" style="stroke-width: 1.25"></line>
+          <path id="m-arc" style="stroke-width: 1.25"></path>
+          <circle id="m-dot" r="3" fill="currentColor" stroke="none"></circle>
+          <text
+            id="m-label"
+            fill="currentColor"
+            stroke="none"
+            style="
+              font-family: &quot;Geist Mono&quot;, monospace;
+              font-size: 13px;
+              letter-spacing: 0.04em;
+            "
+          >
+            17.000°
+          </text>
+        </g>
+        <g
+          id="g-bp"
+          data-sec="1"
+          data-show="0.6,0.7,0.94,1.0"
+          data-noshift=""
+          fill="none"
+          stroke="#cfd8e0"
+          style="opacity: 0"
+        >
+          <line
+            id="b-cl"
+            style="stroke-width: 0.75; stroke-dasharray: 18 4 2 4; opacity: 0.6"
+          ></line>
+          <line id="b-e1" style="stroke-width: 0.75"></line>
+          <line id="b-e2" style="stroke-width: 0.75"></line>
+          <line id="b-len" style="stroke-width: 1"></line>
+          <path id="b-ar" style="stroke-width: 1"></path>
+          <text
+            id="b-len-t"
+            fill="#e8edf2"
+            stroke="none"
+            text-anchor="middle"
+            style="
+              font-family: &quot;Geist Mono&quot;, monospace;
+              font-size: 12px;
+              letter-spacing: 0.06em;
+            "
+          >
+            178.000 mm
+          </text>
+          <polyline id="b-r" style="stroke-width: 0.75"></polyline>
+          <text
+            id="b-r-t"
+            fill="#e8edf2"
+            stroke="none"
+            text-anchor="end"
+            style="
+              font-family: &quot;Geist Mono&quot;, monospace;
+              font-size: 12px;
+              letter-spacing: 0.06em;
+            "
+          >
+            R 46.500
+          </text>
+          <polyline id="b-t" style="stroke-width: 0.75"></polyline>
+          <text
+            id="b-t-t"
+            fill="#e8edf2"
+            stroke="none"
+            style="
+              font-family: &quot;Geist Mono&quot;, monospace;
+              font-size: 12px;
+              letter-spacing: 0.06em;
+            "
+          >
+            t 1.200 ±0.002
+          </text>
+        </g>
+        <g
+          id="g-cog"
+          data-sec="2"
+          data-show="0.16,0.28,0.86,0.95"
+          data-noshift=""
+          fill="none"
+          stroke="#1d1d1f"
+          style="opacity: 0"
+        >
+          <line
+            id="c-v"
+            style="stroke-width: 0.75; stroke-dasharray: 2 4"
+          ></line>
+          <circle
+            id="c-c"
+            r="9"
+            style="stroke-width: 1.25"
+            fill="#f5f5f7"
+          ></circle>
+          <path id="c-q" fill="#1d1d1f" stroke="none"></path>
+          <path id="c-tri" fill="#1d1d1f" stroke="none"></path>
+          <line id="c-base" style="stroke-width: 1"></line>
+          <text
+            id="c-t1"
+            fill="#1d1d1f"
+            stroke="none"
+            text-anchor="middle"
+            style="
+              font-family: &quot;Geist Mono&quot;, monospace;
+              font-size: 11px;
+              letter-spacing: 0.12em;
+            "
+          >
+            CENTER OF GRAVITY
+          </text>
+          <text
+            id="c-t2"
+            fill="#6e6e73"
+            stroke="none"
+            text-anchor="middle"
+            style="
+              font-family: &quot;Geist Mono&quot;, monospace;
+              font-size: 11px;
+              letter-spacing: 0.08em;
+            "
+          >
+            Δ 0.000 mm
+          </text>
+        </g>
+        <g
+          data-sec="3"
+          data-show="0.76,0.86,0.96,1.0"
+          data-noshift=""
+          style="opacity: 0"
+        >
+          <line id="l-lead" stroke="#f5f5f7" style="stroke-width: 0.75"></line>
+          <circle id="l-dot" r="3" fill="#f5f5f7"></circle>
+        </g>
+        <g
+          data-sec="4"
+          data-show="0.5,0.6,0.88,0.96"
+          data-noshift=""
+          stroke="#1d1d1f"
+          style="opacity: 0"
+        >
+          <line id="x-l0" style="stroke-width: 0.75"></line>
+          <line id="x-l1" style="stroke-width: 0.75"></line>
+          <line id="x-l2" style="stroke-width: 0.75"></line>
+          <circle id="x-d0" r="2.5" fill="#1d1d1f" stroke="none"></circle>
+          <circle id="x-d1" r="2.5" fill="#1d1d1f" stroke="none"></circle>
+          <circle id="x-d2" r="2.5" fill="#1d1d1f" stroke="none"></circle>
+        </g>
+      </svg>
+
+      <div style="position: fixed; inset: 0; z-index: 4; pointer-events: none">
+        <div
+          style="
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 12vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 14px;
+            padding: 0 6vw;
+          "
+        >
+          <div
+            data-sec="0"
+            data-show="-1,-0.5,0.22,0.4"
+            data-intro="700"
+            style="
+              opacity: 0;
+              font-size: clamp(64px, 11vw, 168px);
+              font-weight: 600;
+              letter-spacing: -0.06em;
+              line-height: 0.9;
+              color: #1d1d1f;
+            "
+          >
+            SPOON
+          </div>
+          <div
+            data-sec="0"
+            data-show="-1,-0.5,0.2,0.36"
+            data-intro="1400"
+            style="
+              opacity: 0;
+              font-size: clamp(20px, 2.2vw, 32px);
+              font-weight: 400;
+              letter-spacing: -0.015em;
+              color: #6e6e73;
+            "
+          >
+            Eating, perfected.
+          </div>
+        </div>
+        <div
+          data-sec="0"
+          data-show="-1,-0.5,0.04,0.12"
+          data-intro="2400"
+          style="
+            opacity: 0;
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 4.5vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            font-family: &quot;Geist Mono&quot;, monospace;
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            color: #86868b;
+          "
+        >
+          <span>SCROLL</span>
+          <span style="width: 1px; height: 36px; background: #c7c7cc"></span>
+        </div>
+
+        <div
+          style="
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 11vh;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            padding: 0 6vw;
+          "
+        >
+          <div
+            data-sec="1"
+            data-show="0.04,0.14,0.44,0.52"
+            style="
+              opacity: 0;
+              font-size: clamp(40px, 7vw, 112px);
+              font-weight: 600;
+              letter-spacing: -0.05em;
+              line-height: 0.95;
+              color: #1d1d1f;
+            "
+          >
+            17° OF CURVATURE.
+          </div>
+        </div>
+        <div
+          style="
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 12vh;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            padding: 0 6vw;
+          "
+        >
+          <div
+            data-sec="1"
+            data-show="0.16,0.26,0.44,0.52"
+            style="
+              opacity: 0;
+              font-size: clamp(18px, 1.9vw, 28px);
+              letter-spacing: -0.01em;
+              color: #6e6e73;
+              max-width: 30ch;
+              text-wrap: pretty;
+            "
+          >
+            Meal experience designed with
+            <span style="color: #1d1d1f; font-weight: 500">YOU</span> in mind.
+          </div>
+        </div>
+        <div
+          data-sec="1"
+          data-show="0.6,0.7,0.94,1.0"
+          style="
+            opacity: 0;
+            position: absolute;
+            left: 5vw;
+            top: 84px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-family: &quot;Geist Mono&quot;, monospace;
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            color: #cfd8e0;
+          "
+        >
+          <span style="color: #f5f5f7">FIG. 01 — LATERAL ELEVATION</span>
+          <span>SPOON, TABLE, STANDARD</span>
+        </div>
+        <div
+          data-sec="1"
+          data-show="0.64,0.74,0.94,1.0"
+          style="
+            opacity: 0;
+            position: absolute;
+            right: 5vw;
+            bottom: 6vh;
+            display: grid;
+            grid-template-columns: auto auto;
+            border: 1px solid rgba(207, 216, 224, 0.45);
+            font-family: &quot;Geist Mono&quot;, monospace;
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            color: #cfd8e0;
+          "
+        >
+          <span
+            style="
+              padding: 7px 12px;
+              border-right: 1px solid rgba(207, 216, 224, 0.3);
+              border-bottom: 1px solid rgba(207, 216, 224, 0.3);
+            "
+            >DWG NO.</span
+          ><span
+            style="
+              padding: 7px 12px;
+              border-bottom: 1px solid rgba(207, 216, 224, 0.3);
+              color: #f5f5f7;
+            "
+            >SP-0001 REV C</span
+          >
+          <span
+            style="
+              padding: 7px 12px;
+              border-right: 1px solid rgba(207, 216, 224, 0.3);
+              border-bottom: 1px solid rgba(207, 216, 224, 0.3);
+            "
+            >MATERIAL</span
+          ><span
+            style="
+              padding: 7px 12px;
+              border-bottom: 1px solid rgba(207, 216, 224, 0.3);
+              color: #f5f5f7;
+            "
+            >AISI 304</span
+          >
+          <span
+            style="
+              padding: 7px 12px;
+              border-right: 1px solid rgba(207, 216, 224, 0.3);
+              border-bottom: 1px solid rgba(207, 216, 224, 0.3);
+            "
+            >TOLERANCE</span
+          ><span
+            style="
+              padding: 7px 12px;
+              border-bottom: 1px solid rgba(207, 216, 224, 0.3);
+              color: #f5f5f7;
+            "
+            >±0.002 mm</span
+          >
+          <span
+            style="
+              padding: 7px 12px;
+              border-right: 1px solid rgba(207, 216, 224, 0.3);
+            "
+            >FUNCTION</span
+          ><span style="padding: 7px 12px; color: #f5f5f7">SCOOP</span>
+        </div>
+
+        <div
+          style="
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 11vh;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            padding: 0 6vw;
+          "
+        >
+          <div
+            data-sec="2"
+            data-show="0.04,0.14,0.86,0.95"
+            style="
+              opacity: 0;
+              font-size: clamp(40px, 7vw, 112px);
+              font-weight: 600;
+              letter-spacing: -0.05em;
+              line-height: 0.95;
+              color: #1d1d1f;
+            "
+          >
+            PERFECTLY BALANCED.
+          </div>
+        </div>
+        <div
+          style="
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 11vh;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            padding: 0 6vw;
+          "
+        >
+          <div
+            data-sec="2"
+            data-show="0.52,0.62,0.86,0.95"
+            style="
+              opacity: 0;
+              font-size: clamp(20px, 2.2vw, 32px);
+              letter-spacing: -0.015em;
+              line-height: 1.3;
+              color: #1d1d1f;
+              max-width: 28ch;
+              text-wrap: pretty;
+            "
+          >
+            Neither too heavy. Neither too light.
+            <span style="color: #6e6e73">Exactly spoon.</span>
+          </div>
+        </div>
+
+        <div
+          style="
+            position: absolute;
+            left: 6vw;
+            top: 18vh;
+            max-width: min(560px, 88vw);
+          "
+        >
+          <div
+            data-sec="3"
+            data-show="0.06,0.16,0.34,0.4"
+            style="
+              opacity: 0;
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: min(560px, 88vw);
+              display: flex;
+              flex-direction: column;
+              gap: 18px;
+            "
+          >
+            <span
+              style="
+                font-family: &quot;Geist Mono&quot;, monospace;
+                font-size: 11px;
+                letter-spacing: 0.2em;
+                color: #a1a1a6;
+              "
+              >MATERIAL</span
+            >
+            <span
+              style="
+                font-size: clamp(40px, 6.4vw, 104px);
+                font-weight: 600;
+                letter-spacing: -0.05em;
+                line-height: 0.92;
+                color: #f5f5f7;
+              "
+              >STAINLESS STEEL.</span
+            >
+          </div>
+          <div
+            data-sec="3"
+            data-show="0.42,0.5,0.66,0.72"
+            style="
+              opacity: 0;
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: min(560px, 88vw);
+              display: flex;
+              flex-direction: column;
+            "
+          >
+            <span
+              style="
+                font-size: clamp(120px, 21vw, 320px);
+                font-weight: 600;
+                letter-spacing: -0.07em;
+                line-height: 0.82;
+                color: #f5f5f7;
+              "
+              >304</span
+            >
+            <span
+              style="
+                font-size: clamp(28px, 3.6vw, 56px);
+                font-weight: 500;
+                letter-spacing: 0.18em;
+                color: #a1a1a6;
+                padding-left: 0.2em;
+              "
+              >GRADE.</span
+            >
+          </div>
+          <div
+            data-sec="3"
+            data-show="0.72,0.8,0.95,1.0"
+            style="
+              opacity: 0;
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: min(440px, 80vw);
+              display: flex;
+              flex-direction: column;
+              gap: 18px;
+            "
+          >
+            <span
+              style="
+                font-family: &quot;Geist Mono&quot;, monospace;
+                font-size: 11px;
+                letter-spacing: 0.2em;
+                color: #a1a1a6;
+              "
+              >AISI 304 · 18/8 CHROMIUM–NICKEL</span
+            >
+            <span
+              style="
+                font-size: clamp(28px, 3.4vw, 52px);
+                font-weight: 600;
+                letter-spacing: -0.035em;
+                line-height: 1.04;
+                color: #f5f5f7;
+                text-wrap: pretty;
+              "
+              >Strong. Durable. Extremely good at being metal.</span
+            >
+          </div>
+        </div>
+        <div
+          id="sp-loupe"
+          data-sec="3"
+          data-show="0.76,0.86,0.96,1.0"
+          style="
+            opacity: 0;
+            position: absolute;
+            right: 7vw;
+            bottom: 9vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+          "
+        >
+          <div
+            style="
+              width: clamp(140px, 17vw, 232px);
+              aspect-ratio: 1;
+              border-radius: 50%;
+              overflow: hidden;
+              border: 1px solid rgba(245, 245, 247, 0.55);
+              box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+              background: #222;
+            "
+          >
+            <canvas
+              id="sp-micro"
+              style="width: 100%; height: 100%; display: block"
+            ></canvas>
+          </div>
+          <span
+            style="
+              font-family: &quot;Geist Mono&quot;, monospace;
+              font-size: 10px;
+              letter-spacing: 0.16em;
+              color: #a1a1a6;
+            "
+            >GRAIN STRUCTURE · 500×</span
+          >
+        </div>
+
+        <div
+          style="
+            position: absolute;
+            left: 6vw;
+            top: 11vh;
+            max-width: min(520px, 88vw);
+          "
+        >
+          <div
+            id="sp-shape-head"
+            data-sec="4"
+            data-show="0.06,0.16,0.88,0.96"
+            style="opacity: 0; display: flex; flex-direction: column; gap: 16px"
+          >
+            <span
+              style="
+                font-family: &quot;Geist Mono&quot;, monospace;
+                font-size: 11px;
+                letter-spacing: 0.2em;
+                color: #86868b;
+              "
+              >ARCHITECTURE</span
+            >
+            <span
+              style="
+                font-size: clamp(40px, 6.4vw, 104px);
+                font-weight: 600;
+                letter-spacing: -0.05em;
+                line-height: 0.92;
+                color: #1d1d1f;
+              "
+              >THE SHAPE.</span
+            >
+            <span
+              style="
+                font-size: clamp(16px, 1.4vw, 20px);
+                line-height: 1.45;
+                color: #6e6e73;
+                max-width: 32ch;
+                text-wrap: pretty;
+              "
+              >Three precision components. One unified scooping system.</span
+            >
+          </div>
+        </div>
+        <div id="sp-labels">
+          <div id="x-lab0" style="position: absolute; left: 0; top: 0">
+            <div style="transform: translate(-50%, -100%); padding-bottom: 8px">
+              <div
+                data-sec="4"
+                data-show="0.5,0.6,0.88,0.96"
+                data-noshift=""
+                style="
+                  opacity: 0;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  gap: 4px;
+                  white-space: nowrap;
+                "
+              >
+                <span
+                  style="
+                    font-size: 14px;
+                    font-weight: 600;
+                    letter-spacing: 0.14em;
+                    color: #1d1d1f;
+                  "
+                  >BOWL</span
+                >
+                <span
+                  style="
+                    font-family: &quot;Geist Mono&quot;, monospace;
+                    font-size: 10px;
+                    letter-spacing: 0.08em;
+                    color: #6e6e73;
+                  "
+                  >Primary payload volume · 11.4 mL</span
+                >
+              </div>
+            </div>
+          </div>
+          <div id="x-lab1" style="position: absolute; left: 0; top: 0">
+            <div style="transform: translate(-50%, 0); padding-top: 8px">
+              <div
+                data-sec="4"
+                data-show="0.56,0.66,0.88,0.96"
+                data-noshift=""
+                style="
+                  opacity: 0;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  gap: 4px;
+                  white-space: nowrap;
+                "
+              >
+                <span
+                  style="
+                    font-size: 14px;
+                    font-weight: 600;
+                    letter-spacing: 0.14em;
+                    color: #1d1d1f;
+                  "
+                  >THIS BIT</span
+                >
+                <span
+                  style="
+                    font-family: &quot;Geist Mono&quot;, monospace;
+                    font-size: 10px;
+                    letter-spacing: 0.08em;
+                    color: #6e6e73;
+                  "
+                  >Structurally essential · Unnamed</span
+                >
+              </div>
+            </div>
+          </div>
+          <div id="x-lab2" style="position: absolute; left: 0; top: 0">
+            <div style="transform: translate(-50%, -100%); padding-bottom: 8px">
+              <div
+                data-sec="4"
+                data-show="0.62,0.72,0.88,0.96"
+                data-noshift=""
+                style="
+                  opacity: 0;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  gap: 4px;
+                  white-space: nowrap;
+                "
+              >
+                <span
+                  style="
+                    font-size: 14px;
+                    font-weight: 600;
+                    letter-spacing: 0.14em;
+                    color: #1d1d1f;
+                  "
+                  >HANDLE</span
+                >
+                <span
+                  style="
+                    font-family: &quot;Geist Mono&quot;, monospace;
+                    font-size: 10px;
+                    letter-spacing: 0.08em;
+                    color: #6e6e73;
+                  "
+                  >Ergonomic grip interface</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          style="
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 10vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 20px;
+            padding: 0 6vw;
+          "
+        >
+          <div
+            data-sec="5"
+            data-show="0.04,0.12,0.48,0.56"
+            style="
+              opacity: 0;
+              font-family: &quot;Geist Mono&quot;, monospace;
+              font-size: 11px;
+              letter-spacing: 0.24em;
+              color: #a1a1a6;
+            "
+          >
+            LUNCH, MODERNIZED
+          </div>
+          <div
+            data-sec="5"
+            data-show="0.08,0.18,0.48,0.56"
+            style="
+              opacity: 0;
+              font-size: clamp(40px, 6.6vw, 108px);
+              font-weight: 600;
+              letter-spacing: -0.05em;
+              line-height: 0.95;
+              color: #f5f5f7;
+              max-width: 13ch;
+              text-wrap: balance;
+            "
+          >
+            THE FUTURE IS YOURS TO SCOOP.
+          </div>
+        </div>
+        <div
+          style="
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 13vh;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            padding: 0 6vw;
+          "
+        >
+          <div
+            data-sec="5"
+            data-show="0.72,0.82,1.1,1.22"
+            style="
+              opacity: 0;
+              font-size: clamp(22px, 2.4vw, 36px);
+              letter-spacing: -0.015em;
+              color: #a1a1a6;
+            "
+          >
+            It is also a spoon.
+          </div>
+        </div>
+
+        <div
+          id="sp-buy"
+          data-sec="6"
+          data-show="0.3,0.46,3,4"
+          data-interactive=""
+          style="
+            opacity: 0;
+            position: absolute;
+            left: 54vw;
+            top: 50%;
+            margin-top: -170px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 14px;
+            max-width: 440px;
+          "
+        >
+          <span
+            style="
+              font-size: clamp(56px, 7.4vw, 112px);
+              font-weight: 600;
+              letter-spacing: -0.06em;
+              line-height: 0.9;
+              color: #1d1d1f;
+            "
+            >SPOON</span
+          >
+          <span
+            style="
+              font-size: clamp(18px, 1.6vw, 24px);
+              letter-spacing: -0.01em;
+              line-height: 1.35;
+              color: #6e6e73;
+              text-wrap: pretty;
+            "
+            >Your silver-powered meal assist tool.</span
+          >
+          <div
+            style="
+              display: flex;
+              align-items: baseline;
+              gap: 14px;
+              margin-top: 14px;
+            "
+          >
+            <span
+              style="
+                font-size: 20px;
+                color: #86868b;
+                text-decoration: line-through;
+              "
+              >$5.00</span
+            >
+            <span
+              style="
+                font-size: clamp(28px, 2.6vw, 36px);
+                font-weight: 600;
+                letter-spacing: -0.03em;
+                color: #1d1d1f;
+              "
+              >$4.99</span
+            >
+          </div>
+          <button
+            id="sp-buy-btn"
+            type="button"
+            style="
+              margin-top: 6px;
+              border: 0;
+              cursor: pointer;
+              background: #1d1d1f;
+              color: #fbfbfd;
+              font-family: &quot;Geist&quot;, system-ui, sans-serif;
+              font-size: 15px;
+              font-weight: 600;
+              letter-spacing: 0.12em;
+              padding: 18px 40px;
+              border-radius: 999px;
+              transition:
+                transform 0.2s ease,
+                background 0.2s ease;
+            "
+          >
+            <span id="sp-buy-label">BUY SPOON</span>
+            <span id="sp-buy-done" hidden>ADDED TO BAG</span>
+          </button>
+          <span style="font-size: 13px; color: #86868b"
+            >Shipping not included.</span
+          >
+          <span
+            id="sp-buy-added"
+            hidden
+            style="
+              font-family: &quot;Geist Mono&quot;, monospace;
+              font-size: 11px;
+              letter-spacing: 0.12em;
+              color: #1d1d1f;
+            "
+            >EXCELLENT CHOICE. ESTIMATED ARRIVAL: EVENTUALLY.</span
+          >
+        </div>
+      </div>
+
+      <nav
+        style="
+          position: fixed;
+          left: 0;
+          right: 0;
+          top: 0;
+          z-index: 5;
+          height: 52px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 clamp(18px, 4vw, 48px);
+          mix-blend-mode: difference;
+          color: #fff;
+        "
+      >
+        <a
+          href="#"
+          data-go="top"
+          style="font-weight: 700; font-size: 15px; letter-spacing: 0.22em"
+          >SPOON</a
+        >
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: clamp(16px, 2.4vw, 32px);
+            font-size: 13px;
+            letter-spacing: 0.01em;
+          "
+        >
+          <a href="#" data-go="specs">Tech Specs</a>
+          <a href="#" data-go="buy" style="font-weight: 600">Buy</a>
+        </div>
+      </nav>
+
+      <div style="position: relative; z-index: 1; pointer-events: none">
+        <div data-spacer="0" style="height: 160vh"></div>
+        <div data-spacer="1" style="height: 260vh"></div>
+        <div data-spacer="2" style="height: 190vh"></div>
+        <div data-spacer="3" style="height: 230vh"></div>
+        <div data-spacer="4" style="height: 230vh"></div>
+        <div data-spacer="5" style="height: 230vh"></div>
+        <div data-spacer="6" style="height: 140vh"></div>
+      </div>
+    </div>
+  </body>
+</html>
